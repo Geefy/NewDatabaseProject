@@ -24,8 +24,10 @@ namespace SteamMarketWPF
         public void InsertItem(string itemName, string imageLocation)
         {
             string query = "INSERT INTO GoSkins(SkinName, Img) SELECT " + itemName + ", BulkColumn FROM OPENROWSET(Bulk'" + imageLocation + "', SINGLE_BLOB) AS BLOB;";
-
-            db.InsertIntoDatabase(query);
+            if (!imageLocation.ToLower().Contains("drop") || !imageLocation.ToLower().Contains("select") || !imageLocation.ToLower().Contains("insert") || !imageLocation.ToLower().Contains("table") || !imageLocation.ToLower().Contains("database"))
+            {
+                db.InsertIntoDatabase(query);
+            }
         }
 
         public Item GetItem(string itemName)
