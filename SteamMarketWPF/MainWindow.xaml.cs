@@ -52,8 +52,9 @@ namespace SteamMarketWPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            AddItemPage a = new AddItemPage();
-            a.Show();
+            logik.GetAPI();
+            //AddItemPage a = new AddItemPage();
+            //a.Show();
         }
     }
 }

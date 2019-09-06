@@ -6,6 +6,8 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.IO;
+using Microsoft.Win32;
+using System.Net;
 
 namespace SteamMarketWPF
 {
@@ -24,7 +26,7 @@ namespace SteamMarketWPF
         public void InsertItem(string itemName, string imageLocation)
         {
             string query = "INSERT INTO GoSkins(SkinName, Img) SELECT " + itemName + ", BulkColumn FROM OPENROWSET(Bulk'" + imageLocation + "', SINGLE_BLOB) AS BLOB;";
-            if (imageLocation.Contains(";") || imageLocation.Contains("'"))
+            if (itemName.Contains(";"))
             {
                 return;
             }
@@ -64,6 +66,26 @@ namespace SteamMarketWPF
             }
 
             return bitmap;
+        }
+
+        public string ChooseFile()
+        {
+            string imgPath = "";
+            OpenFileDialog op = new OpenFileDialog();
+            op.InitialDirectory = @"C:\Users\rene2756\Desktop\GoImgs";
+            if (op.ShowDialog() == true)
+            {
+                imgPath = op.FileName;
+            }
+            return imgPath;
+        }
+
+        public void GetAPI()
+        {
+        string yeet = new WebClient().DownloadString("https://steamcommunity.com/market/priceoverview/?currency=3&appid=730&market_hash_name=StatTrak%E2%84%A2%20P250%20%7C%20Steel%20Disruption%20%28Factory%20New%29");
+            int pFrom = yeet.IndexOf("{\"success\":true,\"lowest_price\":\"") + "{\"success\":true,\"lowest_price\":\"".Length;
+            int pTo = yeet.LastIndexOf("7");
+            string price = yeet.Substring(pFrom, pTo - pFrom);
         }
     }
 }
